@@ -69,7 +69,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kurdish"
+            android:text="SkriGTA"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@android:color/white" />
@@ -77,7 +77,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RolePlay"
+            android:text="SA-MP"
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/primary_red" />

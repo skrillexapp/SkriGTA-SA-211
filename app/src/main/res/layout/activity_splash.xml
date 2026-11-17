@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:letterSpacing="0.03"
-            android:text="Kurdish"
+            android:text="SkriGTA"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
             android:letterSpacing="0.04"
-            android:text="RolePlay"
+            android:text="SA-MP"
             android:textColor="@color/primary_red"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:letterSpacing="0.02"
-        android:text="Best Kurdish RolePlay Experience"
+        android:text="Servidor SA-MP Mobile | 10.25.60.18"
         android:textColor="#80FFFFFF"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -163,7 +163,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kurdish RolePlay Team"
+            android:text="SkriGTA-SA Team"
             android:textColor="#80FFFFFF"
             android:textSize="8sp" />
 

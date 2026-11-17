@@ -1,6 +1,7 @@
 package com.kurdish.roleplay.launcher.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -69,6 +70,8 @@ public final class SkriSyncHelper {
                 }
 
                 ConfigValidator.validateConfigFiles(activity);
+                activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                        .edit().putLong("last_launch_ms", System.currentTimeMillis()).apply();
 
                 activity.runOnUiThread(() -> {
                     if (progress.isShowing()) progress.dismiss();
@@ -229,5 +232,34 @@ public final class SkriSyncHelper {
                 progress.setProgress(val);
             }
         });
+    }
+
+    public static void checkQuickCrashLog(Activity activity) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        long last = prefs.getLong("last_launch_ms", 0L);
+        if (last <= 0) return;
+        long elapsed = System.currentTimeMillis() - last;
+        prefs.edit().putLong("last_launch_ms", 0L).apply();
+        if (elapsed > 30000L) return;
+
+        File logFile = new File(GameStorage.getGameBaseDirectory(activity), "samp_log.txt");
+        if (!logFile.exists()) return;
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(logFile))) {
+            java.util.ArrayList<String> lines = new java.util.ArrayList<>();
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+                if (lines.size() > 18) lines.remove(0);
+            }
+            if (lines.isEmpty()) return;
+            StringBuilder sb = new StringBuilder();
+            for (String l : lines) sb.append(l).append("
+");
+            new AlertDialog.Builder(activity)
+                    .setTitle("Diagnostico de cierre (samp_log.txt)")
+                    .setMessage(sb.toString())
+                    .setPositiveButton("OK", null)
+                    .show();
+        } catch (Exception ignored) {}
     }
 }

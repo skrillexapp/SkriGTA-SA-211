@@ -57,7 +57,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kurdish"
+                android:text="SkriGTA"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"
                 android:fontFamily="sans-serif-medium"
@@ -66,7 +66,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="RolePlay"
+                android:text="SA-MP"
                 android:textColor="@color/primary_red"
                 android:textSize="18sp"
                 android:fontFamily="sans-serif-black"
@@ -152,7 +152,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kurdish RolePlay"
+                android:text="SkriGTA-SA"
                 android:textColor="#80FFFFFF"
                 android:textSize="10sp" />
         </LinearLayout>

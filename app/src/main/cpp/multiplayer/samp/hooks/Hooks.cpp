@@ -1551,6 +1551,14 @@ stFile* NvFOpen(const char *r1)
     st->isFileExist = false;
 
     FILE *f  = fopen(path, "rb");
+    if (!f && strstr(path, "weapon.dat")) {
+        sprintf(path, "%sSAMP/WEAPON.dat", g_pszStorage);
+        f = fopen(path, "rb");
+    }
+    if (!f && strstr(path, "timecyc.dat")) {
+        sprintf(path, "%sSAMP/TIMECYC.DAT", g_pszStorage);
+        f = fopen(path, "rb");
+    }
 
     if(f)
     {
@@ -1558,6 +1566,7 @@ stFile* NvFOpen(const char *r1)
         st->f = f;
         return st;
     }
+    FLog("NvFOpen FAIL: %s (req=%s)", path, r1);
     else
     {
         FLog("NVFOpen hook | Error: file not found (%s)", path);

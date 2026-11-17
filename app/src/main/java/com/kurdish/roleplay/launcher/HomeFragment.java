@@ -52,6 +52,12 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) SkriSyncHelper.checkQuickCrashLog(getActivity());
+    }
+
     private void openUrl(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
