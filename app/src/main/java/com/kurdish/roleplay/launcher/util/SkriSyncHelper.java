@@ -256,8 +256,7 @@ public final class SkriSyncHelper {
             }
             if (lines.isEmpty()) return;
             StringBuilder sb = new StringBuilder();
-            for (String l : lines) sb.append(l).append("
-");
+            for (String l : lines) sb.append(l).append((char)10);
             new AlertDialog.Builder(activity)
                     .setTitle("Diagnostico de cierre (samp_log.txt)")
                     .setMessage(sb.toString())
@@ -274,14 +273,11 @@ public final class SkriSyncHelper {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().startsWith("host=")) {
-                    sb.append("host=10.25.60.18
-");
+                    sb.append("host=10.25.60.18").append((char)10);
                 } else if (line.trim().startsWith("port=")) {
-                    sb.append("port=7777
-");
+                    sb.append("port=7777").append((char)10);
                 } else {
-                    sb.append(line).append("
-");
+                    sb.append(line).append((char)10);
                 }
             }
             br.close();
