@@ -1559,6 +1559,26 @@ stFile* NvFOpen(const char *r1)
         sprintf(path, "%sSAMP/TIMECYC.DAT", g_pszStorage);
         f = fopen(path, "rb");
     }
+    if (!f && strstr(path, "texdb/")) {
+        const char* fmts[] = {".etc.", ".pvr.", ".dxt.", ".unc.", ".360."};
+        std::string sp(path);
+        for (const char* srcFmt : fmts) {
+            size_t pos = sp.find(srcFmt);
+            if (pos != std::string::npos) {
+                for (const char* dstFmt : fmts) {
+                    if (strcmp(srcFmt, dstFmt) == 0) continue;
+                    std::string cand = sp.substr(0, pos) + dstFmt + sp.substr(pos + strlen(srcFmt));
+                    f = fopen(cand.c_str(), "rb");
+                    if (f) {
+                        FLog("NvFOpen texdb fallback: %s -> %s", path, cand.c_str());
+                        strncpy(path, cand.c_str(), sizeof(path) - 1);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
 
     if(f)
     {
@@ -2014,6 +2034,27 @@ void InstallCrashFixHooks()
 
 }
 void InitGui();
+TextureDatabaseRuntime* (*TextureDatabaseRuntime__Load_orig)(const char *withName, bool fullyLoad, TextureDatabaseFormat forcedFormat);
+TextureDatabaseRuntime* TextureDatabaseRuntime__Load_hook(const char *withName, bool fullyLoad, TextureDatabaseFormat forcedFormat) {
+    if (withName) {
+        char txtPath[256];
+        snprintf(txtPath, sizeof(txtPath), "%stexdb/%s/%s.txt", g_pszStorage, withName, withName);
+        FILE* tf = fopen(txtPath, "rb");
+        if (!tf) {
+            FLog("TextureDatabaseRuntime::Load skipped missing db: %s", withName);
+            return nullptr;
+        }
+        fclose(tf);
+        if (!strcmp(withName, "player") || !strcmp(withName, "playerhi")) {
+            forcedFormat = TextureDatabaseFormat::DF_PVR;
+        } else if (!strcmp(withName, "gta3") || !strcmp(withName, "gta_int") || !strcmp(withName, "mobile") || !strcmp(withName, "txd")) {
+            forcedFormat = TextureDatabaseFormat::DF_ETC;
+        }
+        FLog("TextureDatabaseRuntime::Load(%s, %d, fmt=%d)", withName, fullyLoad ? 1 : 0, (int)forcedFormat);
+    }
+    return TextureDatabaseRuntime__Load_orig(withName, fullyLoad, forcedFormat);
+}
+
 bool (*CGame__InitialiseRenderWare)();
 bool CGame__InitialiseRenderWare_hook() {
     FLog("Loading SAMP texture database..");
@@ -2030,6 +2071,7 @@ void InstallSpecialHooks()
 
     InstallUrezHooks();
 
+    CHook::InlineHook("_ZN22TextureDatabaseRuntime4LoadEPKcb21TextureDatabaseFormat", &TextureDatabaseRuntime__Load_hook, &TextureDatabaseRuntime__Load_orig);
     CHook::InlineHook("_ZN5CGame20InitialiseRenderWareEv", &CGame__InitialiseRenderWare_hook, &CGame__InitialiseRenderWare);
     CHook::InstallPLT(g_libGTASA + 0x83DE90, &StartGameScreen__OnNewGameCheck_hook, &StartGameScreen__OnNewGameCheck);
     CHook::InlineHook("_Z10NvUtilInitv", &NvUtilInit_hook, &NvUtilInit);
