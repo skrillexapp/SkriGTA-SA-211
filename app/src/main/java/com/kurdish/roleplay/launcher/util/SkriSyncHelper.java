@@ -70,6 +70,9 @@ public final class SkriSyncHelper {
                 }
 
                 ConfigValidator.validateConfigFiles(activity);
+                ensureServerAddress(GameStorage.getSettingsFile(activity));
+                File oldLog = new File(GameStorage.getGameBaseDirectory(activity), "samp_log.txt");
+                if (oldLog.exists()) oldLog.delete();
                 activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
                         .edit().putLong("last_launch_ms", System.currentTimeMillis()).apply();
 
@@ -240,7 +243,7 @@ public final class SkriSyncHelper {
         if (last <= 0) return;
         long elapsed = System.currentTimeMillis() - last;
         prefs.edit().putLong("last_launch_ms", 0L).apply();
-        if (elapsed > 30000L) return;
+        if (elapsed > 45000L) return;
 
         File logFile = new File(GameStorage.getGameBaseDirectory(activity), "samp_log.txt");
         if (!logFile.exists()) return;
@@ -249,7 +252,7 @@ public final class SkriSyncHelper {
             String line;
             while ((line = br.readLine()) != null) {
                 lines.add(line);
-                if (lines.size() > 18) lines.remove(0);
+                if (lines.size() > 40) lines.remove(0);
             }
             if (lines.isEmpty()) return;
             StringBuilder sb = new StringBuilder();
@@ -260,6 +263,32 @@ public final class SkriSyncHelper {
                     .setMessage(sb.toString())
                     .setPositiveButton("OK", null)
                     .show();
+        } catch (Exception ignored) {}
+    }
+
+    private static void ensureServerAddress(File settingsFile) {
+        try {
+            if (!settingsFile.exists()) return;
+            java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(settingsFile));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().startsWith("host=")) {
+                    sb.append("host=10.25.60.18
+");
+                } else if (line.trim().startsWith("port=")) {
+                    sb.append("port=7777
+");
+                } else {
+                    sb.append(line).append("
+");
+                }
+            }
+            br.close();
+            FileOutputStream fos = new FileOutputStream(settingsFile);
+            fos.write(sb.toString().getBytes("UTF-8"));
+            fos.flush();
+            fos.close();
         } catch (Exception ignored) {}
     }
 }

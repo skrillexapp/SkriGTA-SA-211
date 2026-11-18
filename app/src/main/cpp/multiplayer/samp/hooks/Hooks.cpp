@@ -1566,7 +1566,6 @@ stFile* NvFOpen(const char *r1)
         st->f = f;
         return st;
     }
-    FLog("NvFOpen FAIL: %s (req=%s)", path, r1);
     else
     {
         FLog("NVFOpen hook | Error: file not found (%s)", path);
