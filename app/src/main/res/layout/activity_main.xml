@@ -36,7 +36,7 @@
         <!-- 🔘 Buttons Row -->
         <LinearLayout
             android:id="@+id/buttonsContainer"
-            android:layout_width="280dp"
+            android:layout_width="190dp"
             android:layout_height="58dp"
             android:layout_gravity="center_horizontal|bottom"
             android:background="@drawable/bg_main"
@@ -74,6 +74,7 @@
 
             <LinearLayout
                 android:id="@+id/btnWeb"
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

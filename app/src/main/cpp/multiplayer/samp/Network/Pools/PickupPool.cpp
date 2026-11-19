@@ -295,6 +295,12 @@ void CPickupPool::Process()
     if (m_activePickupIds.size() != static_cast<size_t>(m_iPickupCount))
         RebuildActivePickupList();
 
+    CPlayerPed* pPlayerPed = pGame ? pGame->FindPlayerPed() : nullptr;
+    bool hasPlayerPos = (pPlayerPed && pPlayerPed->m_pPed);
+    RwMatrix playerMat{};
+    if (hasPlayerPos)
+        playerMat = pPlayerPed->m_pPed->GetMatrix().ToRwMatrix();
+
     auto activeIds = m_activePickupIds;
     for (uint16_t pickupId : activeIds)
     {
@@ -308,6 +314,16 @@ void CPickupPool::Process()
         }
 
         if (ShouldPollPickup(pickupId) && ScriptCommand(&is_pickup_picked_up, m_dwHandle[pickupId]))
+        {
             SendPickedUp(pickupId);
+        }
+        else if (hasPlayerPos && !m_droppedWeapon[pickupId].bDroppedWeapon)
+        {
+            float dx = playerMat.pos.x - m_Pickups[pickupId].pos.x;
+            float dy = playerMat.pos.y - m_Pickups[pickupId].pos.y;
+            float dz = playerMat.pos.z - m_Pickups[pickupId].pos.z;
+            if ((dx * dx + dy * dy + dz * dz) <= 2.56f)
+                SendPickedUp(pickupId);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.kurdish.roleplay.launcher;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment;
 
 import com.kurdish.roleplay.R;
 import com.kurdish.roleplay.launcher.util.SkriSyncHelper;
-import com.kurdish.roleplay.launcher.util.RemoteConfigManager;
 
 public class HomeFragment extends Fragment {
 
@@ -24,43 +22,17 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         View btnPlay = view.findViewById(R.id.btnPlay);
-
-        View discordBtn = view.findViewById(R.id.discordBtn);
-        View webBtn = view.findViewById(R.id.webBtn);
-        View youtubeBtn = view.findViewById(R.id.youtubeBtn);
-
-        discordBtn.setOnClickListener(v -> {
-            String link = RemoteConfigManager.getString("discord");
-            openUrl(link);
-        });
-
-        webBtn.setOnClickListener(v -> {
-            String link = RemoteConfigManager.getString("website");
-            openUrl(link);
-        });
-
-        youtubeBtn.setOnClickListener(v -> {
-            String link = RemoteConfigManager.getString("youtube");
-            openUrl(link);
-        });
-
         btnPlay.setOnClickListener(v -> {
             android.util.Log.d("HomeFragment", "Play button clicked");
-
             SkriSyncHelper.launchWithSync(requireActivity());
         });
 
         return view;
     }
+
     @Override
     public void onResume() {
         super.onResume();
         if (getActivity() != null) SkriSyncHelper.checkQuickCrashLog(getActivity());
-    }
-
-    private void openUrl(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 }

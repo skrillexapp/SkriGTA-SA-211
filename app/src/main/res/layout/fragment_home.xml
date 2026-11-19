@@ -4,12 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient_modern"
+    android:background="@drawable/bg_skrigta_launcher"
     android:keepScreenOn="true">
 
     <!-- 🔴 Background Circles -->
     <ImageView
         android:id="@+id/bgTopRight"
+        android:visibility="gone"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:alpha="0.25"
@@ -21,6 +22,7 @@
 
     <ImageView
         android:id="@+id/bgTopLeft"
+        android:visibility="gone"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:alpha="0.25"
@@ -89,6 +91,7 @@
 
         <!-- 🌐 Social Icons -->
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"

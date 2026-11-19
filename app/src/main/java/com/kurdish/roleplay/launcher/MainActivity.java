@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         ConfigValidator.validateConfigFiles(this);
 
-        View[] buttons = {btnHome, btnSettings, btnWeb};
+        View[] buttons = {btnHome, btnSettings};
 
         View.OnClickListener navClick = v -> {
             if (activeCircle.getVisibility() != View.VISIBLE)
@@ -79,10 +79,7 @@ public class MainActivity extends AppCompatActivity {
             openSettings();
         });
 
-        btnWeb.setOnClickListener(v -> {
-            navClick.onClick(v);
-            openWeb();
-        });
+        if (btnWeb != null) btnWeb.setVisibility(View.GONE);
 
         setupSimpleAnimations();
     }
@@ -142,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnHome.setOnTouchListener(touchListener);
         btnSettings.setOnTouchListener(touchListener);
-        btnWeb.setOnTouchListener(touchListener);
+        
     }
     @Override
     public void onBackPressed() {
